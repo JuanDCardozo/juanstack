@@ -1,0 +1,25 @@
+pipeline: voice-to-post
+description: Raw voice-note transcript or braindump to publish-ready blog post
+stages:
+  - skill: intake
+
+  - skill: inline
+    name: draft
+    input: structured-md
+    output: draft-md
+    instructions: >
+      Write the post in the user's voice: direct, concrete, first person,
+      no corporate speak, no em dashes. 600-1000 words unless the material
+      demands otherwise. Lead with the strongest idea.
+
+  - checkpoint: "Draft ready. Continue to edit, or feedback first?"
+
+  - skill: inline
+    name: edit
+    input: draft-md
+    output: final-md
+    instructions: >
+      Apply checkpoint feedback. Tighten by ~15%, cut every sentence that
+      doesn't earn its place. Add a title and one-line description as
+      front matter. Embed the pipeline header comment so a future run
+      can resume from this artifact.

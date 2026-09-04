@@ -1,0 +1,6 @@
+# Personal calibration. Never commit.
+**/matrix.local.md
+*.local.md
+
+.DS_Store
+.claude/

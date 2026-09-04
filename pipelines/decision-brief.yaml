@@ -1,0 +1,20 @@
+pipeline: decision-brief
+description: A tangled position or half-formed decision to a defensible written call
+stages:
+  - skill: intake
+
+  - skill: steelman
+
+  - skill: prior-art
+
+  - checkpoint: "Steelman and prior art done. Anything to correct before I write the call?"
+
+  - skill: inline
+    name: decide
+    input: prior-art-md
+    output: decision-md
+    instructions: >
+      Write the decision. Lead with the call in one line, then the two or three
+      reasons that actually drove it, then what would change it. Cite the
+      steelman verdict and the divergence verdict rather than restating them.
+      Under 600 words. No hedging, no summary of the process.

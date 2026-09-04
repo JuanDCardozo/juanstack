@@ -1,0 +1,21 @@
+# External input/output annotations for skills without a `pipeline:` block
+# in their own frontmatter. User-owned skills should self-declare instead;
+# this registry is for third-party/public skills.
+#
+# Types are lowercase tags, conventions not a formal system.
+
+skills:
+  docx:
+    input: final-md
+    output: docx
+  pdf:
+    input: final-md
+    output: pdf
+
+# juanstack skills self-declare in their own frontmatter:
+#   intake                raw-text       -> structured-md
+#   steelman              structured-md  -> structured-md
+#   prior-art             structured-md  -> prior-art-md
+#   structure-post        draft-md       -> shaped-md
+#   pr-clean              pr-ref         -> pr-status-md
+#   opportunity-doctrine  raw-text       -> verdict-md
