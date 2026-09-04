@@ -12,13 +12,5 @@ skills:
     input: final-md
     output: pdf
 
-# juanstack skills self-declare in their own frontmatter:
-#   intake                raw-text       -> structured-md
-#   steelman              structured-md  -> structured-md
-#   prior-art             structured-md  -> prior-art-md
-#   structure-post        draft-md       -> shaped-md
-#   pr-clean              pr-ref         -> pr-status-md
-#   opportunity-doctrine  raw-text       -> verdict-md
-#   repo-orient           raw-text       -> brief-md
-#   readback              brief-md       -> spec-md
-#   build                 spec-md        -> report-md
+# juanstack skills self-declare in their own frontmatter; read the
+# `pipeline:` block in each skills/<name>/SKILL.md rather than listing them here.

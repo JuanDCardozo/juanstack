@@ -43,7 +43,8 @@ this skill would destroy someone's work.
 ## The rules file
 
 Read `.pr-clean.yml` from the repo root. If absent, use the defaults below and
-say once that you're running unconfigured. Repo rules override defaults; they
+say once that you're running unconfigured; `pr-clean.example.yml` next to this
+file is a copyable starting point. Repo rules override defaults; they
 never loosen the "never" list at the bottom of this file.
 
 ```yaml

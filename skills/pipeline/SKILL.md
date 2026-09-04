@@ -11,8 +11,8 @@ Orchestration skill. It does no work itself; it reads a yaml pipeline definition
 
 - **Pipeline definitions**: `~/.claude/pipelines/*.yaml`. In the juanstack repo these live at the repo root under `pipelines/`; `setup.sh` copies them to `~/.claude/pipelines/`. That directory persists across conversations; see "Adding or editing pipelines" below.
 - **Type registry**: `~/.claude/pipelines/types.yaml` — external input/output annotations for skills that don't declare their own.
-- **Run state**: `/home/claude/pipeline-runs/<run-name>/` — exists only for the current conversation.
-- **Deliverables**: copied to `/mnt/user-data/outputs/` and presented at the end.
+- **Run state**: `~/.claude/pipeline-runs/<run-name>/` — persists across sessions on this machine.
+- **Deliverables**: copied to `./pipeline-output/<run-name>/` in the working directory and presented at the end.
 
 ## Pipeline definition format
 
@@ -50,7 +50,7 @@ pipeline:
 ```
 
 Validation protocol:
-1. For each `skill:` stage, read that skill's SKILL.md from `/mnt/skills/user/<name>/` (or `/mnt/skills/public|plugins/...` for skills the user doesn't own). Look for the `pipeline:` block in frontmatter.
+1. For each `skill:` stage, read that skill's SKILL.md from `~/.claude/skills/<name>/` (or `.claude/skills/<name>/` in the current project for project-scoped skills). Look for the `pipeline:` block in frontmatter.
 2. If the skill has no `pipeline:` block, look it up in `~/.claude/pipelines/types.yaml`. That registry annotates third-party skills externally.
 3. If it's in neither place, warn the user that the stage is untyped, and treat its types as wildcards (matches anything) rather than blocking the run.
 4. Walk the chain: stage N's output type must equal stage N+1's input type (checkpoints are transparent to typing). On mismatch, stop before executing anything, name the two stages and the two types, and propose fixes (reorder, insert a converting stage, or override with user confirmation).
@@ -59,9 +59,9 @@ Types are lowercase tags like `raw-text`, `structured-md`, `draft-md`, `final-md
 
 ## Execution protocol
 
-1. **Resolve the definition**: inline paste in this conversation > matching yaml in `~/.claude/pipelines/` > Project knowledge or `/mnt/user-data/uploads/`. If asked to "list pipelines", read `~/.claude/pipelines/` and summarize each yaml's name and description.
+1. **Resolve the definition**: inline paste in this conversation > matching yaml in `~/.claude/pipelines/` > a yaml path the user names. If asked to "list pipelines", read `~/.claude/pipelines/` and summarize each yaml's name and description.
 2. **Validate the chain** (above). Do not execute an invalid chain.
-3. **Create the run directory**: `/home/claude/pipeline-runs/<run-name>/` with a short descriptive run name, and one subdirectory per stage: `NN-<stage-name>/`.
+3. **Create the run directory**: `~/.claude/pipeline-runs/<run-name>/` with a short descriptive run name, and one subdirectory per stage: `NN-<stage-name>/`.
 4. **Collect first inputs.** If the first stage's input is user-provided and missing, ask once, specifically.
 5. **Execute stages in order.** For each skill stage:
    - Read the skill's full SKILL.md and follow it. For `inline` stages, the `instructions` field is the full spec.
@@ -69,7 +69,7 @@ Types are lowercase tags like `raw-text`, `structured-md`, `draft-md`, `final-md
    - Write output files to `NN-<stage-name>/output/`.
    - Write a status file `NN-<stage-name>/status.md` (format below).
 6. **At checkpoints**: show the latest output (inline if short, presented file if long), ask the checkpoint question, stop. Do not continue in the same message.
-7. **Deliver**: copy final outputs to `/mnt/user-data/outputs/`, present them, give a one-paragraph run summary.
+7. **Deliver**: copy final outputs to `./pipeline-output/<run-name>/`, present them, give a one-paragraph run summary.
 
 ## Status files
 
@@ -89,15 +89,15 @@ stage: <N> of <total>
 - [ ] <stage N+2 name>
 ```
 
-Also maintain `/home/claude/pipeline-runs/<run-name>/status.md` as the roll-up: same checklist covering the whole pipeline, updated after every stage. These files are the portable state of the run.
+Also maintain `~/.claude/pipeline-runs/<run-name>/status.md` as the roll-up: same checklist covering the whole pipeline, updated after every stage. These files are the portable state of the run.
 
-## Resuming across conversations and surfaces
+## Resuming across sessions and surfaces
 
-The run directory dies with the conversation, so cross-session state travels through the status files:
+Run state lives in `~/.claude/pipeline-runs/`, so a run on this machine resumes by name:
 
-- If a run will span sessions, or the user asks to pause, zip the run directory, copy it to outputs, and present it. Tell the user: upload this (or just the status files plus last output) to resume.
-- On "resume": read the uploaded status.md files, rebuild the run directory, mark completed stages done, re-validate the remaining chain, and continue from the first unchecked stage.
-- The same status folder is readable by Claude Code and Cowork sessions working from disk, so a run started in chat can be finished there and vice versa. Keep the format boring and identical everywhere.
+- On "resume <run-name>": read its status.md files, mark completed stages done, re-validate the remaining chain, and continue from the first unchecked stage. If asked to "list runs", read that directory and show each roll-up's position.
+- To move a run to another machine or surface (a claude.ai chat, a Cowork session), zip the run directory into `./pipeline-output/` and tell the user to upload it there. On receiving uploaded status files, rebuild the run directory from them and continue the same way.
+- The status format is the portable state, so keep it boring and identical everywhere.
 
 ## Failure handling
 
@@ -109,6 +109,6 @@ Definitions are plain files in `~/.claude/pipelines/`, not part of the skill. To
 
 1. Preferred: edit `pipelines/*.yaml` in the juanstack repo and re-run `./setup.sh`, so the repo stays the source of truth. If the repo is not to hand, write the yaml straight into `~/.claude/pipelines/` and it resolves on the next run; copy it back to the repo later.
 2. Offer this proactively when the user runs the same inline definition twice: "want me to save this to ~/.claude/pipelines/?"
-3. For fast-churning definitions, suggest Project knowledge instead: paste the yaml there and it resolves without touching disk.
+3. For fast-churning definitions, keep the yaml in the project and pass its path; it resolves without installing.
 
 Same for `types.yaml`: register a new third-party skill's types by editing it in place. For the user's own skills, the better fix is adding the `pipeline:` frontmatter block to that skill directly next time it's updated.

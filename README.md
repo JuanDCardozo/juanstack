@@ -70,7 +70,7 @@ Pipeline definitions are in `pipelines/`. A stage is either an installed skill o
 
 ## Local calibration
 
-`opportunity-doctrine` reads its salary floors from `matrix.local.md` next to its `SKILL.md`. The repo ships `matrix.example.md` with the shape and no numbers; anything matching `*.local.md` is gitignored, so a skill can carry private calibration without the skill itself being private. `pr-clean` reads `.pr-clean.yml` from the repo it works in.
+`opportunity-doctrine` reads its salary floors from `matrix.local.md` next to its `SKILL.md`. The repo ships `matrix.example.md` with the shape and no numbers; anything matching `*.local.md` is gitignored, so a skill can carry private calibration without the skill itself being private. `pr-clean` reads `.pr-clean.yml` from the repo it works in; `skills/pr-clean/pr-clean.example.yml` is the template.
 
 ## License
 

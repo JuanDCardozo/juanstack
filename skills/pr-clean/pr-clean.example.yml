@@ -1,0 +1,38 @@
+# Copy to <your-repo>/.pr-clean.yml and adjust. These are the defaults the
+# skill runs with when the file is absent. Unlisted categories escalate, and
+# nothing here can loosen the skill's own "Never" list.
+
+wait:
+  poll_seconds: 60
+  timeout_minutes: 30
+  required_checks: []            # empty = every required check on the PR
+
+autofix:                         # fix without asking
+  - lint
+  - formatting
+  - import_order
+  - typo
+  - generated_files              # lockfiles, snapshots, codegen
+  - flaky_retry                  # rerun a known-flaky check once before treating it as real
+
+escalate:                        # always ask, never fix silently
+  - api_surface_change
+  - behavior_change
+  - schema_or_migration
+  - security
+  - dependency_bump
+  - test_deleted_or_weakened
+  - reviewer_disagreement
+
+protected_paths:                 # never edit, always escalate
+  - infra/**
+  - .github/workflows/**
+  - "**/*.sql"
+
+bots:
+  trust: [github-actions]        # findings actionable as-is
+  advisory: []                   # triage as suggestions, lower priority
+
+reply_to_threads: true           # post what was done on each thread
+resolve_threads: false           # let the human reviewer resolve
+max_rounds: 3
