@@ -1,6 +1,6 @@
 ---
 name: pipeline
-description: Orchestrates multi-stage workflows by chaining installed skills, defined in yaml files under ~/.claude/pipelines/. Validates that chained skills are compatible via their declared input/output types before executing. Use whenever the user says "run the X pipeline", "pipeline", "/pipeline", names a yaml in ~/.claude/pipelines/, pastes a pipeline definition inline, or describes a multi-step workflow where one skill's output feeds another (e.g. "take this transcript, intake it, draft a post, format it"). Also use when the user uploads artifacts or a status folder from a previous run and wants to resume, or asks to list, add, or edit pipelines.
+description: Orchestrates multi-stage workflows by chaining installed skills, defined in yaml files under ~/.claude/pipelines/ (or ~/.cursor/pipelines/ under Cursor). Validates that chained skills are compatible via their declared input/output types before executing. Use whenever the user says "run the X pipeline", "pipeline", "/pipeline", names a yaml in ~/.claude/pipelines/, pastes a pipeline definition inline, or describes a multi-step workflow where one skill's output feeds another (e.g. "take this transcript, intake it, draft a post, format it"). Also use when the user uploads artifacts or a status folder from a previous run and wants to resume, or asks to list, add, or edit pipelines.
 ---
 
 # Pipeline
@@ -9,7 +9,7 @@ Orchestration skill. It does no work itself; it reads a yaml pipeline definition
 
 ## Where things live
 
-- **Pipeline definitions**: `~/.claude/pipelines/*.yaml`. In the juanstack repo these live at the repo root under `pipelines/`; `setup.sh` copies them to `~/.claude/pipelines/`. That directory persists across conversations; see "Adding or editing pipelines" below.
+- **Pipeline definitions**: `<root>/pipelines/*.yaml`, where `<root>` is the directory holding the installed skills: `~/.claude` under Claude Code, `~/.cursor` under Cursor. In the juanstack repo these live at the repo root under `pipelines/`; `setup.sh` copies them next to the skills. The rest of this file says `~/.claude/pipelines/`; read it as `<root>/pipelines/`. That directory persists across conversations; see "Adding or editing pipelines" below.
 - **Type registry**: `~/.claude/pipelines/types.yaml` — external input/output annotations for skills that don't declare their own.
 - **Run state**: `~/.claude/pipeline-runs/<run-name>/` — persists across sessions on this machine.
 - **Deliverables**: copied to `./pipeline-output/<run-name>/` in the working directory and presented at the end.

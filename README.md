@@ -10,6 +10,11 @@ git clone https://github.com/JuanDCardozo/juanstack.git && cd juanstack && ./set
 
 That copies `skills/*` to `~/.claude/skills/` and `pipelines/*.yaml` to `~/.claude/pipelines/`. Edit here, re-run to update.
 
+```bash
+./setup.sh --cursor        # same layout under ~/.cursor
+./setup.sh /some/root      # any root that has skills/ beneath it
+```
+
 ## How the skills chain
 
 ```
