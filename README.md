@@ -43,12 +43,27 @@ That copies `skills/*` to `~/.claude/skills/` and `pipelines/*.yaml` to `~/.clau
  pr-ref ----> [pr-clean] ---> pr-status-md         loops on CI and review comments
 
 
- coding chain, wired by reference instead of yaml
+ task-to-code
+ ------------
+ raw-text ...... the task, in a repo you haven't seen
+    |
+ [repo-orient] .. what it is, how to run it, where the task lands
+    |
+ brief-md
+    |
+ [readback] ..... questions worth asking, defaults to proceed under
+    |
+ spec-md
+    |
+ -- checkpoint --
+    |
+ [build] ........ plan, verify, red-green-refactor via [tdd], report
+    |
+ report-md
 
- [repo-orient] --> [readback] --> [build] --> [tdd]
-                                     |
-                      reads [api-prompting] and [llm-orchestration-patterns]
-                      when the thing being built is an LLM app
+ [build] also reads [api-prompting] and [llm-orchestration-patterns]
+ when the thing being built is an LLM app. Those two and [tdd] are
+ reference skills, not stages.
 ```
 
 Pipeline definitions are in `pipelines/`. A stage is either an installed skill or an `inline` block with its own instructions; a `checkpoint` stops and asks before continuing. Types are lowercase tags, conventions not a schema, and `pipelines/types.yaml` annotates third-party skills that don't declare their own.

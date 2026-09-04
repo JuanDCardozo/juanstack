@@ -1,6 +1,9 @@
 ---
 name: build
 description: End-to-end build loop for one unit of work — drafts a plan, verifies it, implements test-first via TDD, then reports back a summary. Use when the user says "build this", "implement this", or hands you a task/spec and wants it taken from raw requirement to verified, tested code in one go. Does not include the requirements-clarification pass — run `readback` separately first if the task needs it.
+pipeline:
+  input: spec-md
+  output: report-md
 ---
 
 # Build

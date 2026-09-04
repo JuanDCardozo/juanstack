@@ -1,6 +1,9 @@
 ---
 name: readback
 description: Surfaces ambiguities, unstated edge cases, and assumptions in a task or spec as a short checklist before implementation starts. Use at the start of an interview-style coding task, when requirements are informal, verbal, or pasted in loosely, or when the user says "what would you ask about this", "check for edge cases", "clarify this spec".
+pipeline:
+  input: brief-md
+  output: spec-md
 ---
 
 # Readback

@@ -1,6 +1,9 @@
 ---
 name: repo-orient
 description: Produces a fast, read-only orientation briefing for an unfamiliar codebase — what it does, how to build/run/test it, and where things live. Use at the start of a live coding interview or any time you're dropped into a repo you've never seen, when the user asks to understand, map, or get oriented in a codebase, or says things like "what am I looking at", "orient me", "give me the lay of the land".
+pipeline:
+  input: raw-text
+  output: brief-md
 ---
 
 # Repo Orientation

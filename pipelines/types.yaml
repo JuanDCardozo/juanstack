@@ -19,3 +19,6 @@ skills:
 #   structure-post        draft-md       -> shaped-md
 #   pr-clean              pr-ref         -> pr-status-md
 #   opportunity-doctrine  raw-text       -> verdict-md
+#   repo-orient           raw-text       -> brief-md
+#   readback              brief-md       -> spec-md
+#   build                 spec-md        -> report-md
