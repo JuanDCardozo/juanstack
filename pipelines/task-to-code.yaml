@@ -1,0 +1,10 @@
+pipeline: task-to-code
+description: A task description in an unfamiliar repo to verified, tested code
+stages:
+  - skill: repo-orient
+
+  - skill: readback
+
+  - checkpoint: "Questions and default assumptions above. Answer any, or say go to build under the defaults."
+
+  - skill: build
